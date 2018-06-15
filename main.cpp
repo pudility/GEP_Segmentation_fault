@@ -67,7 +67,10 @@ int main () {
 
   // Create a GEP with the loaded index
   auto *loadedVar = mBuilder.CreateLoad(variable, "loaded_index");
-  auto *elementPtr = mBuilder.CreateGEP(mStruct, PrefixZero(loadedVar));
+
+  // This is where the problem is.
+  // If `PrefixZero` is changed to `ConstantInt::get(mContext, APInt(32, 0))` this works
+  auto *elementPtr = mBuilder.CreateGEP(mStruct, PrefixZero(loadedVar)); 
 
   mBuilder.CreateRet(ConstantInt::get(mContext, APInt(32, 0))); 
   f->print(errs()); // print out the function
